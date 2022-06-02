@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -23,12 +24,13 @@ class ScheduleList extends StatefulWidget {
 class _ScheduleListState extends State<ScheduleList> {
   final _priorityList = <String>['high','medium','low'];
   bool isCommended = false;
+  final _focusNode = FocusNode();//포커스 노드
+  final _inputTodoController = TextEditingController();
 
   // 나중에 이 값들 다 전역으로 어디 한 군데에서 다 관리해야하지 싶은데...
   final _fixedItems = <ToDo>[ToDo('fixed', 0, true), ToDo('fixed1' , 2, true)];
   final _items = <ToDo>[ToDo('test', 0, false), ToDo('test1', 2, false), ToDo('test2', 1, false)];
 
-  final _inputTodoController = TextEditingController();
   String _inputPriority = 'high';
   bool _inputIsFixed = false;
 
@@ -75,12 +77,12 @@ class _ScheduleListState extends State<ScheduleList> {
         padding: const EdgeInsets.fromLTRB(10, 4,10,4),
         child :
         GestureDetector(
-            onTap: (){
-              setState(() {
-                todo.isDone = !todo.isDone;
-              });
-            },
-            child: GestureDetector(
+          onTap: (){
+            setState(() {
+              todo.isDone = !todo.isDone;
+            });
+          },
+          child: GestureDetector(
               onLongPress: () {
                 showDialog(
                   context: context,
@@ -93,9 +95,9 @@ class _ScheduleListState extends State<ScheduleList> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: const Color.fromARGB(255, 46, 46, 46),
-                                ),
+                                  style: TextButton.styleFrom(
+                                    primary: const Color.fromARGB(255, 46, 46, 46),
+                                  ),
                                   onPressed: (){
                                     _inputTodoController.text = todo.title;
                                     Navigator.pop(context);
@@ -111,34 +113,34 @@ class _ScheduleListState extends State<ScheduleList> {
                                               ),
                                               actions: [
                                                 GestureDetector(
-                                                  onTap: () {
-                                                    _modifyTodo(todo);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children:[
-                                                      Transform.translate(offset: const Offset(0, -3),
-                                                        child: Container(
-                                                          width: 240,
-                                                          decoration: const BoxDecoration(
-                                                            color: Color.fromARGB(255, 255, 246, 222),
-                                                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                                                          ),
-                                                          child: const Padding(
-                                                            padding: EdgeInsets.all(10),
-                                                            child: Text(
-                                                                'modify',
-                                                                textAlign: TextAlign.center,
-                                                                style: TextStyle(
-                                                                  color: Color.fromARGB(255, 46, 46, 46),
-                                                                )
+                                                    onTap: () {
+                                                      _modifyTodo(todo);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children:[
+                                                          Transform.translate(offset: const Offset(0, -10),
+                                                            child: Container(
+                                                              width: 240,
+                                                              decoration: const BoxDecoration(
+                                                                color: Color.fromARGB(255, 255, 246, 222),
+                                                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                              ),
+                                                              child: const Padding(
+                                                                padding: EdgeInsets.all(10),
+                                                                child: Text(
+                                                                    'modify',
+                                                                    textAlign: TextAlign.center,
+                                                                    style: TextStyle(
+                                                                      color: Color.fromARGB(255, 46, 46, 46),
+                                                                    )
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ]
-                                                  )
+                                                          )
+                                                        ]
+                                                    )
                                                 )
                                               ],
                                             );
@@ -175,13 +177,14 @@ class _ScheduleListState extends State<ScheduleList> {
                 );
               },
               child : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     width: 15,
                     height: 15,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color.fromARGB(255, 46, 46, 46),
+                        color: const Color.fromARGB(255, 46, 46, 46),
                       ),
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
@@ -203,22 +206,26 @@ class _ScheduleListState extends State<ScheduleList> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(13, 0, 13, 0 ),
-                    child:Text(
-                      todo.title,
-                      style: todo.isDone?
-                      const TextStyle(
-                        color: Color.fromARGB(255, 46, 46, 46),
-                        decoration: TextDecoration.lineThrough,
-                      ) : const TextStyle(
-                        color: Color.fromARGB(255, 46, 46, 46),
-                      ),
-                    ),
+                  Container(
+                      width: 250,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(13, 0, 13, 0 ),
+                        child:Text(
+                          todo.title,
+                          softWrap: true,
+                          style: todo.isDone?
+                          const TextStyle(
+                            color: Color.fromARGB(255, 46, 46, 46),
+                            decoration: TextDecoration.lineThrough,
+                          ) : const TextStyle(
+                            color: Color.fromARGB(255, 46, 46, 46),
+                          ),
+                        ),
+                      )
                   )
                 ],
               )
-            ),
+          ),
         )
     );
   }
@@ -226,6 +233,7 @@ class _ScheduleListState extends State<ScheduleList> {
   @override
   void dispose() {
     _inputTodoController.dispose(); // 컨트롤러는 종료시 반드시 해제해줘야 함
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -235,12 +243,12 @@ class _ScheduleListState extends State<ScheduleList> {
     return Column(
       children: <Widget> [
         Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child:Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'TODAY...',
+                const Text(
+                  'Today\'s Schedules...',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 46, 46, 46)),
                 ),
                 Transform.translate(
@@ -251,7 +259,7 @@ class _ScheduleListState extends State<ScheduleList> {
                     child: Transform.translate(
                       offset: const Offset(-10, -10),
                       child: TextButton(
-                          child: Text('+', style: TextStyle(fontSize: 30)),
+                          child: const Text('+', style: TextStyle(fontSize: 30)),
                           onPressed: () {
                             /**** popup stateful 속성을 가질 수 있도록 ****/
                             showDialog(
@@ -266,8 +274,11 @@ class _ScheduleListState extends State<ScheduleList> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           GestureDetector(
-                                            onTap: () => Navigator.pop(context),
-                                            child: Text('X'),
+                                            onTap: () {
+                                              _inputTodoController.text = '';
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('X'),
                                           ),
                                           const Text("ADD ITEM" ,
                                               style: TextStyle(
@@ -280,8 +291,25 @@ class _ScheduleListState extends State<ScheduleList> {
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          TextField(
-                                            controller: _inputTodoController,
+                                          Container(
+                                            width:250,
+                                            child: TextField(
+                                                focusNode: _focusNode,
+                                                autofocus: true,
+                                                controller: _inputTodoController,
+                                                decoration: const InputDecoration(
+                                                  labelText: 'title',
+                                                  hintText: 'Enter your task',
+                                                  labelStyle: TextStyle(color: Color.fromARGB(255, 106, 93, 60)),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                  ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(width: 1, color: Color.fromARGB(255, 106, 93, 60)),
+                                                  ),
+                                                  contentPadding:EdgeInsets.symmetric(vertical: -10.0, horizontal: 15.0),
+                                                )
+                                            ),
                                           ),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,7 +336,7 @@ class _ScheduleListState extends State<ScheduleList> {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text('fixed', style: TextStyle(color: Color.fromARGB(255, 46, 46, 46))),
+                                              const Text('fixed', style: TextStyle(color: Color.fromARGB(255, 46, 46, 46))),
                                               Checkbox(
                                                   fillColor: MaterialStateProperty.all(Colors.lightGreen),
                                                   value: _inputIsFixed,
@@ -325,43 +353,43 @@ class _ScheduleListState extends State<ScheduleList> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             GestureDetector(
-                                              onTap: () {
-                                                if(_inputTodoController.text!=''){
-                                                  var list;
+                                                onTap: () {
+                                                  if(_inputTodoController.text!=''){
+                                                    var list;
 
-                                                  if(_inputIsFixed) list = _fixedItems;
-                                                  else list = _items;
+                                                    if(_inputIsFixed) list = _fixedItems;
+                                                    else list = _items;
 
-                                                  switch(_inputPriority){
-                                                    case 'high': _addTodo(ToDo(_inputTodoController.text, 2, _inputIsFixed), list); break;
-                                                    case 'medium': _addTodo(ToDo(_inputTodoController.text, 1, _inputIsFixed), list); break;
-                                                    case 'low': _addTodo(ToDo(_inputTodoController.text, 0, _inputIsFixed), list); break;
+                                                    switch(_inputPriority){
+                                                      case 'high': _addTodo(ToDo(_inputTodoController.text, 2, _inputIsFixed), list); break;
+                                                      case 'medium': _addTodo(ToDo(_inputTodoController.text, 1, _inputIsFixed), list); break;
+                                                      case 'low': _addTodo(ToDo(_inputTodoController.text, 0, _inputIsFixed), list); break;
+                                                    }
+                                                    Navigator.pop(context);
                                                   }
-                                                  Navigator.pop(context);
-                                                }
-                                                else {
-                                                  print('다시 입력해주시게');
-                                                }
-                                              },
-                                              child: Transform.translate(offset: const Offset(0, -8),
-                                              child: Container(
-                                                width: 240,
-                                                decoration: const BoxDecoration(
-                                                  color: Color.fromARGB(255, 255, 246, 222),
-                                                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                                                ),
-                                                child: const Padding(
-                                                  padding: EdgeInsets.all(12),
-                                                  child: Text(
-                                                      'add',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Color.fromARGB(255, 46, 46, 46),
-                                                      )
+                                                  else {
+                                                    _focusNode.requestFocus();
+                                                  }
+                                                },
+                                                child: Transform.translate(offset: const Offset(0, -20),
+                                                  child: Container(
+                                                    width: 240,
+                                                    decoration: const BoxDecoration(
+                                                      color: Color.fromARGB(255, 255, 246, 222),
+                                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                    ),
+                                                    child: const Padding(
+                                                      padding: EdgeInsets.all(12),
+                                                      child: Text(
+                                                          'add',
+                                                          textAlign: TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: Color.fromARGB(255, 46, 46, 46),
+                                                          )
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            )
+                                                )
                                             )
                                           ],
                                         ),
@@ -373,9 +401,9 @@ class _ScheduleListState extends State<ScheduleList> {
                             );
                           },
                           style: TextButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 234, 178),
-                            primary: Color.fromARGB(255, 106, 93, 60),
-                            padding: EdgeInsets.all(0),
+                            backgroundColor: const Color.fromARGB(255, 255, 234, 178),
+                            primary: const Color.fromARGB(255, 106, 93, 60),
+                            padding: const EdgeInsets.all(0),
                           )
                       ),
                     ),
@@ -383,9 +411,9 @@ class _ScheduleListState extends State<ScheduleList> {
                 ),
               ],
             )),
-        Padding(padding : EdgeInsets.fromLTRB(0, 0, 0, 10),
+        Padding(padding : const EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: Row(
-            children: [Text('fixed',style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 46, 46, 46)))],
+            children: const [Text('fixed',style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 46, 46, 46)))],
           ),
         ),
         ...(isCommended ?
@@ -409,8 +437,8 @@ class _ScheduleListState extends State<ScheduleList> {
               Transform.scale(
                 scale: 1.2,
                 child: Switch(
-                  activeColor: Color.fromARGB(255, 177, 166, 139),
-                  inactiveTrackColor: Color.fromARGB(255, 244, 233, 200),
+                  activeColor: const Color.fromARGB(255, 177, 166, 139),
+                  inactiveTrackColor: const Color.fromARGB(255, 244, 233, 200),
                   value: isCommended,
                   onChanged: (value) {
                     setState(() {
