@@ -8,20 +8,64 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   CalendarFormat format = CalendarFormat.month;
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: TableCalendar(
-        focusedDay: DateTime.now(),
+        focusedDay: focusedDay,
         firstDay: DateTime(2020),
         lastDay: DateTime(2030),
         calendarFormat: format,
         onFormatChanged: (CalendarFormat _format) {
-            setState(() {
-              format = _format;
-            });
+          setState(() {
+            format = _format;
+          });
         },
+        daysOfWeekVisible: true,
+
+        // Day Changed
+        onDaySelected: (DateTime selectDay, DateTime focusDay) {
+          setState(() {
+            selectedDay = selectDay;
+            focusedDay = focusDay;
+          });
+          print(focusedDay);
+        },
+        selectedDayPredicate: (DateTime date) {
+          return isSameDay(selectedDay, date);
+        },
+
+        // Style
+        calendarStyle: CalendarStyle(
+          // isTodayHighlighted: true,
+          selectedDecoration: BoxDecoration(
+            color: Color(0xffCBEBD8),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          selectedTextStyle: TextStyle(color: Color(0xff2E2E2E)),
+          todayDecoration: BoxDecoration(
+            color: Color(0xffCBEBD8),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          todayTextStyle: TextStyle(color: Color(0xff2E2E2E)),
+        ),
+        headerStyle: HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          decoration: BoxDecoration(
+            color: Color(0xffCBEBD8),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10)
+            ),
+          ),
+        ),
       ),
     );
   }

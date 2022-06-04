@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 
               /************ 여기 캘린더 ************/
               SizedBox (
-                height: 340,
+                height: 392,
                 // width: 200,
                 child:
                   Calendar(),
