@@ -38,6 +38,7 @@ class _HealthListState extends State<HealthList> {
   bool _inputIsFixed = false;
   final _selectedDays = <DateTime>[];
   DateTime _selectedTime = DateTime(1970,1,1, 0, 0,1);
+  DateTime _focusedDay = DateTime.now();
 
 
 
@@ -245,6 +246,25 @@ class _HealthListState extends State<HealthList> {
     );
   }
 
+  // 선택된 날짜 표시
+  Widget _buildEventsMarkerNum(DateTime day) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      decoration: const BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: Color(0xFFFFF0C2),
+      ),
+      child: Center(
+        child: Text(
+          day.day.toString(),
+          style: const TextStyle().copyWith(
+            color: const Color(0xff2d2d2d),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _inputTodoController.dispose(); // 컨트롤러는 종료시 반드시 해제해줘야 함
@@ -334,60 +354,70 @@ class _HealthListState extends State<HealthList> {
                                                         )
                                                     ),
                                                   ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: const [Text('Date', style: TextStyle(height:2),)]
+                                                  ),
                                                   Flexible(
-                                                    child:SizedBox(
-                                                        width: 250,
-                                                        height: 245,
-                                                        child: TableCalendar(
-                                                          rowHeight: 30,
-                                                          focusedDay: DateTime.now(),
-                                                          firstDay: DateTime(2022,1,1),
-                                                          lastDay: DateTime(2022,12,31),
-                                                          headerStyle: const HeaderStyle(
-                                                            headerMargin: EdgeInsets.only(left:0, top:0, right:0, bottom:0),
-                                                            headerPadding: EdgeInsets.symmetric(vertical: 0),
-                                                            titleCentered: true,
-                                                            formatButtonVisible: false,
-                                                            titleTextStyle: TextStyle(fontSize:15.0),
-                                                          ),
-                                                          calendarStyle: const CalendarStyle(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                        border: Border.all(
+                                                            color:const Color(0xFFF6DE99)
+                                                        ),
+                                                      ),
+                                                      child:SizedBox(
+                                                          width: 250,
+                                                          height: 245,
+                                                          child: TableCalendar(
+                                                            rowHeight: 30,
+                                                            focusedDay: _focusedDay,
+                                                            firstDay: DateTime(2020),
+                                                            lastDay: DateTime(2030),
+                                                            headerStyle: const HeaderStyle(
+                                                              headerMargin: EdgeInsets.only(left:0, top:0, right:0, bottom:0),
+                                                              headerPadding: EdgeInsets.symmetric(vertical: 0),
+                                                              titleCentered: true,
+                                                              formatButtonVisible: false,
+                                                              titleTextStyle: TextStyle(fontSize:15.0),
+                                                            ),
+                                                            calendarStyle: const CalendarStyle(
                                                               cellMargin: EdgeInsets.all(0),
                                                               cellPadding: EdgeInsets.all(0),
                                                               todayDecoration: BoxDecoration(
-                                                                  color: Color.fromARGB(120, 255, 246, 222),
+                                                                  color: Color.fromARGB(
+                                                                      153, 255,
+                                                                      246, 222),
                                                                   borderRadius: BorderRadius.all(Radius.circular(300))
                                                               ),
                                                               todayTextStyle: TextStyle(
                                                                 color: Colors.black,
                                                               ),
-                                                              markerDecoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                                color: Color.fromARGB(100, 139, 195, 74),
-                                                              ),
-                                                              markerSizeScale: 1.1,
-                                                              markersOffset: PositionedOffset(top: -10)
-                                                          ),
-                                                          daysOfWeekStyle: const DaysOfWeekStyle(
-                                                            weekdayStyle: TextStyle(fontSize:10),
-                                                            weekendStyle: TextStyle(fontSize:10),
-                                                          ),
-                                                          onDaySelected: (selectedDay, _){
-                                                            setState((){
-                                                              if(_selectedDays.contains(selectedDay)){
-                                                                _selectedDays.remove(selectedDay);
-                                                              }
-                                                              else {
-                                                                _selectedDays.add(selectedDay);
-                                                              }
-                                                            });
-                                                          },
-                                                          eventLoader: (day){
-                                                            if(_selectedDays.contains(day))
-                                                              return ['check'];
-                                                            else
-                                                              return [];
-                                                          },
-                                                        )
+                                                            ),
+                                                            calendarBuilders: CalendarBuilders(
+                                                                markerBuilder: (context, date, events) {
+                                                                  if (_selectedDays.contains(date)) {
+                                                                    return _buildEventsMarkerNum(date);
+                                                                  }
+                                                                }
+                                                            ),
+                                                            daysOfWeekStyle: const DaysOfWeekStyle(
+                                                              weekdayStyle: TextStyle(fontSize:10),
+                                                              weekendStyle: TextStyle(fontSize:10),
+                                                            ),
+                                                            onDaySelected: (selectedDay, _){
+                                                              setState((){
+                                                                _focusedDay = selectedDay;
+                                                                if(_selectedDays.contains(selectedDay)){
+                                                                  _selectedDays.remove(selectedDay);
+                                                                }
+                                                                else {
+                                                                  _selectedDays.add(selectedDay);
+                                                                }
+                                                              });
+                                                            },
+                                                          )
+                                                      ),
                                                     ),
                                                   ),
                                                   Row(
