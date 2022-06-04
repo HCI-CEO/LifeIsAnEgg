@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_is_an_egg/calendar.dart';
 import 'package:life_is_an_egg/day_file_box.dart';
 
 void main() {
@@ -33,11 +34,17 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
 
 
               /************ 여기 캘린더 ************/
-
+              SizedBox (
+                height: 340,
+                // width: 200,
+                child:
+                  Calendar(),
+              ),
 
               FileBox(),
             ],
@@ -47,5 +54,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
