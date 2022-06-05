@@ -14,7 +14,6 @@ class _FileBoxState extends State<FileBox> {
   int curPage = 0;
 
   void navigate(int p){
-
     setState(() {
       List _temp = [..._navPageImg];
       for(int i=0;i<3;i++){
@@ -79,16 +78,16 @@ class _FileBoxState extends State<FileBox> {
         ),
         Container(
           width: 365,
-          color: Color.fromARGB(255, 255, 246, 222),
+          color: const Color.fromARGB(255, 255, 246, 222),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             child:(
                 curPage==0?
                 /**** ScheduleList() ****/ null :(
                     curPage==1?
                     /**** 여기에 null 대신 Health ****/ null  : (
                         curPage==2?
-                            Submit()
+                            ReflectionResult()
                             :null
                     )
                 )
@@ -96,17 +95,6 @@ class _FileBoxState extends State<FileBox> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class Submit extends StatelessWidget {
-  const Submit({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ReflectionResult()
     );
   }
 }
