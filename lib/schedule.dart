@@ -228,6 +228,18 @@ class _ScheduleListState extends State<ScheduleList> {
     );
   }
 
+  List<DateTime>? getEveryWeekDay(int weekDay){
+    List<DateTime> days = [];
+    DateTime d = DateTime(2022,4,1).add(Duration(days: ((weekDay-DateTime(2022,1,1).weekday+7) % 7) +1));
+
+    while(d.year <= 2022){
+      days.add(d);
+      d = d.add(const Duration(days:7));
+    }
+
+    return days;
+  }
+
   @override
   void dispose() {
     _inputTodoController.dispose(); // 컨트롤러는 종료시 반드시 해제해줘야 함
@@ -367,32 +379,58 @@ class _ScheduleListState extends State<ScheduleList> {
                                                 GestureDetector(
                                                     onTap: () {
                                                       if(_inputTodoController.text!=''){
-                                                        var temp;
+                                                        String title = _inputTodoController.text;
+                                                        if(_inputIsFixed){
+                                                          var dayList = getEveryWeekDay(selectedDay.weekday);
+                                                          
+                                                          for(int i =0 ; i< dayList!.length ;i++){
+                                                            if(calendarAll[dayList[i].month] == null){
+                                                              calendarAll[dayList[i].month]={};
+                                                            }
 
-                                                        if(_inputIsFixed) temp = 'fixed';
-                                                        else temp = 'unfixed';
+                                                            if(calendarAll[dayList[i].month]?[dayList[i].day] == null){
+                                                              calendarAll[dayList[i].month]?[dayList[i].day]={};
+                                                            }
 
-                                                        if(calendarAll[selectedDay.month] == null){
-                                                          calendarAll[selectedDay.month]={};
+                                                            if(calendarAll[dayList[i].month]?[dayList[i].day]?['schedule'] == null) {
+                                                              calendarAll[dayList[i].month]?[dayList[i].day]?['schedule'] = {};
+                                                              calendarAll[dayList[i].month]?[dayList[i].day]?['schedule']?['fixed'] = [];
+                                                            }
+
+                                                            var list = calendarAll[dayList[i].month]?[dayList[i].day]?['schedule']?['fixed'];
+
+                                                            switch(_inputPriority){
+                                                              case 'high': _addTodo(data.ToDo(title, 2), list); break;
+                                                              case 'medium': _addTodo(data.ToDo(title, 1), list); break;
+                                                              case 'low': _addTodo(data.ToDo(title, 0), list); break;
+                                                            }
+                                                          }
                                                         }
+                                                        else {
+                                                          if(calendarAll[selectedDay.month] == null){
+                                                            calendarAll[selectedDay.month]={};
+                                                          }
 
-                                                        if(calendarAll[selectedDay.month]?[selectedDay.day] == null){
-                                                          calendarAll[selectedDay.month]?[selectedDay.day]={};
+                                                          if(calendarAll[selectedDay.month]?[selectedDay.day] == null){
+                                                            calendarAll[selectedDay.month]?[selectedDay.day]={};
+                                                          }
+
+                                                          if(calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] == null) {
+                                                            calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] = {};
+                                                            calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?['unfixed'] = [];
+                                                          }
+
+                                                          var list = calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?['unfixed'];
+
+                                                          switch(_inputPriority){
+                                                            case 'high': _addTodo(data.ToDo(title, 2), list); break;
+                                                            case 'medium': _addTodo(data.ToDo(title, 1), list); break;
+                                                            case 'low': _addTodo(data.ToDo(title, 0), list); break;
+                                                          }
                                                         }
-
-                                                        if(calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] == null) {
-                                                          calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] = {};
-                                                          calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?[temp] = [];
-                                                        }
-
-                                                        var list = calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?[temp];
-
-                                                        switch(_inputPriority){
-                                                          case 'high': _addTodo(data.ToDo(_inputTodoController.text, 2), list); break;
-                                                          case 'medium': _addTodo(data.ToDo(_inputTodoController.text, 1), list); break;
-                                                          case 'low': _addTodo(data.ToDo(_inputTodoController.text, 0), list); break;
-                                                        }
-                                                        Navigator.pop(context);
+                                                        setState((){
+                                                          Navigator.pop(context);
+                                                        });
                                                       }
                                                       else {
                                                         _focusNode.requestFocus();
