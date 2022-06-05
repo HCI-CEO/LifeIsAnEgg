@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_is_an_egg/reflection.dart';
 // import 'package:life_is_an_egg/schedule.dart';
 
 class FileBox extends StatefulWidget {
@@ -87,7 +88,7 @@ class _FileBoxState extends State<FileBox> {
                     curPage==1?
                     /**** 여기에 null 대신 Health ****/ null  : (
                         curPage==2?
-                        /**** 여기에 null 대신 reflection ****/ null
+                            Submit()
                             :null
                     )
                 )
@@ -95,6 +96,17 @@ class _FileBoxState extends State<FileBox> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class Submit extends StatelessWidget {
+  const Submit({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ReflectionResult()
     );
   }
 }
