@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:life_is_an_egg/calendar.dart';
 import 'package:life_is_an_egg/day_file_box.dart';
+import 'package:life_is_an_egg/global_data.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context)=>CalendarData(),
+        child: const MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {

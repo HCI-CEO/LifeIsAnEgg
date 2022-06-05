@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:provider/provider.dart';
+import 'package:life_is_an_egg/global_data.dart' as data;
 
 class Calendar extends StatefulWidget {
   @override
   State<Calendar> createState() => _CalendarState();
 }
 
+
 class _CalendarState extends State<Calendar> {
+
+  Widget _buildEventsMarkerNum(DateTime day) {
+    return Transform.translate(
+      offset: const Offset(0,-6),
+      child: Container (
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8.0),
+          color:
+          selectedDay.month == day.month && selectedDay.day == day.day ? const Color(0xffFFF1CD) : const Color(0xffCCEBD8)
+        ),
+        child: Center(
+          child: Text(
+            day.day.toString(),
+            style: const TextStyle().copyWith(
+              color: const Color(0xff2E2E2E),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    var calendar = context.watch<data.CalendarData>().calendar;
     return Scaffold(
       body: TableCalendar(
         focusedDay: focusedDay,
@@ -31,33 +60,55 @@ class _CalendarState extends State<Calendar> {
             selectedDay = selectDay;
             focusedDay = focusDay;
           });
-          print(focusedDay);
+          // print(focusedDay);
         },
         selectedDayPredicate: (DateTime date) {
           return isSameDay(selectedDay, date);
         },
-
         // Style
         calendarStyle: CalendarStyle(
           // isTodayHighlighted: true,
-          selectedDecoration: BoxDecoration(
-            color: Color(0xffFFF1CD),
+          selectedDecoration: (selectedDay.month == DateTime.now().month && selectedDay.day == DateTime.now().day) ? BoxDecoration(
+            border: Border.all(
+                color: const Color(0xffCBEBD8),
+                width: 5.0
+            ),
+              borderRadius: BorderRadius.circular(8.0),
+          ) : BoxDecoration(
+            color: const Color(0xffFFF1CD), // 노란색
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
           ),
-          selectedTextStyle: TextStyle(color: Color(0xff2E2E2E)),
+          selectedTextStyle: const TextStyle(color: Color(0xff2E2E2E)),
           todayDecoration: BoxDecoration(
             border: Border.all(
-              color: Color(0xffCBEBD8),
+              color: const Color(0xffCBEBD8),
               width: 5.0
             ),
             // color: Color(0xffCBEBD8),
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
           ),
-          todayTextStyle: TextStyle(color: Color(0xff2E2E2E)),
+          todayTextStyle: const TextStyle(color: Color(0xff2E2E2E)),
+          defaultDecoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          weekendDecoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
         ),
-        headerStyle: HeaderStyle(
+        calendarBuilders: CalendarBuilders(
+          markerBuilder: (context, date, events) {
+            if (calendar.containsKey(date.month) && calendar[date.month]!.containsKey(date.day)) {
+              if (!(DateTime.now().month == date.month && DateTime.now().day == date.day)) {
+                return _buildEventsMarkerNum(date);
+              }
+            }
+          }
+        ),
+        headerStyle: const HeaderStyle(
           headerMargin: EdgeInsets.only(bottom: 12),
           formatButtonVisible: false,
           titleCentered: true,
@@ -71,6 +122,7 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
         ),
+
       ),
     );
   }
