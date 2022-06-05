@@ -11,7 +11,7 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
 
-  Widget _buildEventsMarkerNum(DateTime day) {
+  Widget _buildEventsMarkerNum(DateTime day, DateTime selectedDay) {
     return Transform.translate(
       offset: const Offset(0,-6),
       child: Container (
@@ -35,11 +35,12 @@ class _CalendarState extends State<Calendar> {
     );
   }
   CalendarFormat format = CalendarFormat.month;
-  DateTime selectedDay = DateTime.now();
+
   DateTime focusedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDay = context.watch<data.CalendarData>().selectedDay;
     var calendar = context.watch<data.CalendarData>().calendar;
     return Scaffold(
       body: TableCalendar(
@@ -57,7 +58,8 @@ class _CalendarState extends State<Calendar> {
         // Day Changed
         onDaySelected: (DateTime selectDay, DateTime focusDay) {
           setState(() {
-            selectedDay = selectDay;
+            // selectedDay = selectDay;
+            context.read<data.CalendarData>().changeDay(selectDay);
             focusedDay = focusDay;
           });
           // print(focusedDay);
@@ -103,7 +105,7 @@ class _CalendarState extends State<Calendar> {
           markerBuilder: (context, date, events) {
             if (calendar.containsKey(date.month) && calendar[date.month]!.containsKey(date.day)) {
               if (!(DateTime.now().month == date.month && DateTime.now().day == date.day)) {
-                return _buildEventsMarkerNum(date);
+                return _buildEventsMarkerNum(date, selectedDay);
               }
             }
           }
