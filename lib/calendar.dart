@@ -43,6 +43,7 @@ class _CalendarState extends State<Calendar> {
     DateTime selectedDay = context.watch<data.CalendarData>().selectedDay;
     var calendar = context.watch<data.CalendarData>().calendar;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: TableCalendar(
         focusedDay: focusedDay,
         firstDay: DateTime(2020),
