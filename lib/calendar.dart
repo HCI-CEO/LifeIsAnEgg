@@ -41,19 +41,24 @@ class _CalendarState extends State<Calendar> {
         calendarStyle: CalendarStyle(
           // isTodayHighlighted: true,
           selectedDecoration: BoxDecoration(
-            color: Color(0xffCBEBD8),
+            color: Color(0xffFFF1CD),
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
           ),
           selectedTextStyle: TextStyle(color: Color(0xff2E2E2E)),
           todayDecoration: BoxDecoration(
-            color: Color(0xffCBEBD8),
+            border: Border.all(
+              color: Color(0xffCBEBD8),
+              width: 5.0
+            ),
+            // color: Color(0xffCBEBD8),
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
           ),
           todayTextStyle: TextStyle(color: Color(0xff2E2E2E)),
         ),
         headerStyle: HeaderStyle(
+          headerMargin: EdgeInsets.only(bottom: 12),
           formatButtonVisible: false,
           titleCentered: true,
           decoration: BoxDecoration(
@@ -61,8 +66,8 @@ class _CalendarState extends State<Calendar> {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)
+              // bottomLeft: Radius.circular(10),
+              // bottomRight: Radius.circular(10)
             ),
           ),
         ),

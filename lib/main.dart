@@ -34,14 +34,13 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-
 
               /************ 여기 캘린더 ************/
               SizedBox (
-                height: 392,
-                // width: 200,
+                height: 404,
+                width: 355,
                 child:
                   Calendar(),
               ),
