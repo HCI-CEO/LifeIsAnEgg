@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:life_is_an_egg/calendar.dart';
 import 'package:life_is_an_egg/day_file_box.dart';
 import 'package:life_is_an_egg/global_data.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
+
     ChangeNotifierProvider(
       create: (context)=>CalendarData(),
       child: const MyApp(),
@@ -41,8 +43,17 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
 
+
+              /************ 여기 캘린더 ************/
+              SizedBox (
+                height: 404,
+                width: 355,
+                child:
+                  Calendar(),
+              ),
               FileBox(),
             ],
           ),
@@ -51,5 +62,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
