@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:life_is_an_egg/schedule.dart';
+import 'package:life_is_an_egg/health.dart';
+import 'package:life_is_an_egg/schedule.dart';
 
 class FileBox extends StatefulWidget {
   const FileBox({Key? key}) : super(key: key);
@@ -77,15 +78,15 @@ class _FileBoxState extends State<FileBox> {
           ),
         ),
         Container(
-          width: 365,
+          width: 355,
           color: Color.fromARGB(255, 255, 246, 222),
           child: Padding(
             padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child:(
                 curPage==0?
-                /**** ScheduleList() ****/ null :(
+                ScheduleList() :(
                     curPage==1?
-                    /**** 여기에 null 대신 Health ****/ null  : (
+                    HealthList()  : (
                         curPage==2?
                         /**** 여기에 null 대신 reflection ****/ null
                             :null
