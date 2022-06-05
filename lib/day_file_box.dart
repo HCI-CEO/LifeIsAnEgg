@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_is_an_egg/health.dart';
+import 'package:life_is_an_egg/reflection.dart';
 import 'package:life_is_an_egg/schedule.dart';
 
 class FileBox extends StatefulWidget {
@@ -14,7 +15,6 @@ class _FileBoxState extends State<FileBox> {
   int curPage = 0;
 
   void navigate(int p){
-
     setState(() {
       List _temp = [..._navPageImg];
       for(int i=0;i<3;i++){
@@ -81,14 +81,14 @@ class _FileBoxState extends State<FileBox> {
           width: 355,
           color: Color.fromARGB(255, 255, 246, 222),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             child:(
                 curPage==0?
                 ScheduleList() :(
                     curPage==1?
                     HealthList()  : (
                         curPage==2?
-                        /**** 여기에 null 대신 reflection ****/ null
+                            ReflectionResult()
                             :null
                     )
                 )
