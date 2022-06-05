@@ -2,17 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-
-
-// 요 투두도..
-class ToDoHealth {
-  bool isDone = false;
-  String title;
-  DateTime doingTime;
-
-  ToDoHealth(this.title, this.doingTime);
-}
-
+import 'package:life_is_an_egg/global_data.dart' as data;
+import 'package:provider/provider.dart';
 
 
 class HealthList extends StatefulWidget {
@@ -26,16 +17,6 @@ class _HealthListState extends State<HealthList> {
   final _focusNode = FocusNode();//포커스 노드
   final _inputTodoController = TextEditingController();
 
-  // 나중에 이 값들 다 전역으로 어디 한 군데에서 다 관리해야하지 싶은데...
-  final _healthItems = <ToDoHealth>[
-    ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
-    ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
-    ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23)),
-  ];
-
-
-
-  bool _inputIsFixed = false;
   final _selectedDays = <DateTime>[];
   DateTime _selectedTime = DateTime(1970,1,1, 0, 0,1);
   DateTime _focusedDay = DateTime.now();
@@ -43,26 +24,22 @@ class _HealthListState extends State<HealthList> {
 
 
   /**** 할 일 추가 메소드 ****/
-  void _addTodo(ToDoHealth todoHealth) {
+  void _addTodo(data.ToDoHealth todoHealth, List<dynamic> list) {
     setState(() {
-      _healthItems.add(todoHealth);
-      _inputTodoController.text = '';
-
-      // _selectedDays.clear();
-      _inputIsFixed = false;
-      _healthItems.sort((a, b) => a.doingTime.compareTo(b.doingTime));
+      list.add(todoHealth);
+      list.sort((a, b) => a.doingTime.compareTo(b.doingTime));
     });
   }
 
   /**** 할 일 삭제 메소드 ****/
-  void _deleteTodo(ToDoHealth todoHealth) {
+  void _deleteTodo(data.ToDoHealth todoHealth, List<dynamic> list) {
     setState(() {
-      _healthItems.remove(todoHealth);
+      list.remove(todoHealth);
     });
   }
 
   /**** 할 일 title 수정 메소드 ****/
-  void _modifyTodo(ToDoHealth todoHealth){
+  void _modifyTodo(data.ToDoHealth todoHealth){
     setState((){
       todoHealth.title = _inputTodoController.text;
       _inputTodoController.text='';
@@ -70,7 +47,7 @@ class _HealthListState extends State<HealthList> {
   }
 
   /**** Todo list item 만들기 ****/
-  Widget buildItemWidget(ToDoHealth todoHealth) {
+  Widget buildItemWidget(data.ToDoHealth todoHealth, List<dynamic> list) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(10, 4,10,4),
         child :
@@ -161,7 +138,7 @@ class _HealthListState extends State<HealthList> {
                                       primary: Colors.redAccent,
                                     ),
                                     onPressed: () {
-                                      _deleteTodo(todoHealth);
+                                      _deleteTodo(todoHealth, list);
                                       Navigator.pop(context);
                                     },
                                     child: const Padding(
@@ -180,8 +157,10 @@ class _HealthListState extends State<HealthList> {
               },
               child : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 15,
@@ -247,9 +226,8 @@ class _HealthListState extends State<HealthList> {
   }
 
   // 선택된 날짜 표시
-  Widget _buildEventsMarkerNum(DateTime day) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
+  Widget _buildEventsMarker(DateTime day) {
+    return Container(
       decoration: const BoxDecoration(
         shape: BoxShape.rectangle,
         color: Color(0xFFFFF0C2),
@@ -275,6 +253,11 @@ class _HealthListState extends State<HealthList> {
 
   @override
   Widget build(BuildContext context) {
+    var selectedDay = context.watch<data.CalendarData>().selectedDay;//DateTime(2022,6,10);
+    var healthItems = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['health']?['tasks'];
+
+    var calendarAll = context.watch<data.CalendarData>().calendar;
+
     return Column(
       children: <Widget> [
         Padding(
@@ -282,9 +265,13 @@ class _HealthListState extends State<HealthList> {
             child:Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Today\' Health...',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 46, 46, 46)),
+                Text(
+                  (selectedDay.month == DateTime.now().month && selectedDay.day == DateTime.now().day?
+                  'Today\'s Health...'
+                      :
+                  '${DateFormat.MMMd().format(selectedDay)}${selectedDay.day==1? 'st' : selectedDay.day==2? 'nd' : selectedDay.day==3? 'rd' : 'th'} Health...'
+                  ),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 46, 46, 46)),
                 ),
                 Transform.translate(
                   offset: const Offset(10, 10),
@@ -294,7 +281,6 @@ class _HealthListState extends State<HealthList> {
                     child: Transform.translate(
                       offset: const Offset(-10, -10),
                       child: TextButton(
-                          child: const Text('+', style: TextStyle(fontSize: 30)),
                           onPressed: () {
                             /**** popup stateful 속성을 가질 수 있도록 ****/
                             showDialog(
@@ -316,7 +302,8 @@ class _HealthListState extends State<HealthList> {
                                               GestureDetector(
                                                 onTap: () {
                                                   _inputTodoController.text = '';
-                                                  _selectedTime=DateTime(1970,1,1, 0, 0,1);
+                                                  _selectedTime = DateTime(1970,1,1, 0, 0,1);
+                                                  _focusedDay = DateTime.now();
                                                   _selectedDays.clear();
                                                   Navigator.pop(context);
                                                 },
@@ -397,7 +384,7 @@ class _HealthListState extends State<HealthList> {
                                                             calendarBuilders: CalendarBuilders(
                                                                 markerBuilder: (context, date, events) {
                                                                   if (_selectedDays.contains(date)) {
-                                                                    return _buildEventsMarkerNum(date);
+                                                                    return _buildEventsMarker(date);
                                                                   }
                                                                 }
                                                             ),
@@ -453,8 +440,25 @@ class _HealthListState extends State<HealthList> {
                                                 GestureDetector(
                                                     onTap: () {
                                                       if(_inputTodoController.text!=''){
+                                                        for(int i = 0; i<_selectedDays.length; i++) {
+                                                          var list;
+                                                          if(calendarAll[_selectedDays[i].month] == null){
+                                                            calendarAll[_selectedDays[i].month]={};
+                                                          }
 
-                                                        _addTodo(ToDoHealth(_inputTodoController.text, _selectedTime));
+                                                          if(calendarAll[_selectedDays[i].month]?[_selectedDays[i].day] == null){
+                                                            calendarAll[_selectedDays[i].month]?[_selectedDays[i].day]={};
+                                                          }
+
+                                                          if(calendarAll[_selectedDays[i].month]?[_selectedDays[i].day]?['health'] == null) {
+                                                            calendarAll[_selectedDays[i].month]?[_selectedDays[i].day]?['health'] = {};
+                                                            calendarAll[_selectedDays[i].month]?[_selectedDays[i].day]?['health']?['tasks'] = [];
+                                                          }
+                                                          list = calendarAll[_selectedDays[i].month]?[_selectedDays[i].day]?['health']?['tasks'];
+                                                          _addTodo(data.ToDoHealth(_inputTodoController.text, _selectedTime), list);
+                                                        }
+                                                        _inputTodoController.text = '';
+                                                        _selectedDays.clear();
                                                         Navigator.pop(context);
                                                       }
                                                       else {
@@ -495,14 +499,15 @@ class _HealthListState extends State<HealthList> {
                             backgroundColor: const Color.fromARGB(255, 255, 234, 178),
                             primary: const Color.fromARGB(255, 106, 93, 60),
                             padding: const EdgeInsets.all(0),
-                          )
+                          ),
+                          child: const Text('+', style: TextStyle(fontSize: 30)),
                       ),
                     ),
                   ),
                 ),
               ],
             )),
-        ...(_healthItems.map((item) => buildItemWidget(item))),
+        ...(healthItems==null? [] : healthItems.map((item) => buildItemWidget(item, healthItems))),
         Container(
           height: 20,
         ),
