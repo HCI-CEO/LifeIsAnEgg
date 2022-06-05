@@ -48,7 +48,7 @@ class _ScheduleListState extends State<ScheduleList> {
   }
 
   /**** 추천기능이 적용된 리스트 정렬 ****/
-  List<data.ToDo> onRecommend(List<data.ToDo> item){
+  List<data.ToDo> onRecommend(List<dynamic> item){
     List<data.ToDo> temp;
     temp = [...item];
     temp.sort((a,b)=>b.priority.compareTo(a.priority));
@@ -56,7 +56,7 @@ class _ScheduleListState extends State<ScheduleList> {
   }
 
   /**** Todo list item 만들기 ****/
-  Widget buildItemWidget(data.ToDo todo, List<data.ToDo> list) {
+  Widget buildItemWidget(data.ToDo todo, List<dynamic> list) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(10, 4,10,4),
         child :
@@ -242,6 +242,8 @@ class _ScheduleListState extends State<ScheduleList> {
     var fixedItems = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['fixed'];
     var items = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['unfixed'];
 
+    var calendarAll = context.watch<data.CalendarData>().calendar;
+
     return Column(
       children: <Widget> [
         Padding(
@@ -365,10 +367,25 @@ class _ScheduleListState extends State<ScheduleList> {
                                                 GestureDetector(
                                                     onTap: () {
                                                       if(_inputTodoController.text!=''){
-                                                        var list;
+                                                        var temp;
 
-                                                        if(_inputIsFixed) list = fixedItems;
-                                                        else list = items;
+                                                        if(_inputIsFixed) temp = 'fixed';
+                                                        else temp = 'unfixed';
+
+                                                        if(calendarAll[selectedDay.month] == null){
+                                                          calendarAll[selectedDay.month]={};
+                                                        }
+
+                                                        if(calendarAll[selectedDay.month]?[selectedDay.day] == null){
+                                                          calendarAll[selectedDay.month]?[selectedDay.day]={};
+                                                        }
+
+                                                        if(calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] == null) {
+                                                          calendarAll[selectedDay.month]?[selectedDay.day]?['schedule'] = {};
+                                                          calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?[temp] = [];
+                                                        }
+
+                                                        var list = calendarAll[selectedDay.month]?[selectedDay.day]?['schedule']?[temp];
 
                                                         switch(_inputPriority){
                                                           case 'high': _addTodo(data.ToDo(_inputTodoController.text, 2), list); break;
