@@ -6,10 +6,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-      ChangeNotifierProvider(
-        create: (context)=>CalendarData(),
-        child: const MyApp(),
-      )
+
+    ChangeNotifierProvider(
+      create: (context)=>CalendarData(),
+      child: const MyApp(),
+    )
   );
 }
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
       ),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
 
+
               /************ 여기 캘린더 ************/
               SizedBox (
                 height: 404,
@@ -51,7 +54,6 @@ class MyApp extends StatelessWidget {
                 child:
                   Calendar(),
               ),
-
               FileBox(),
             ],
           ),

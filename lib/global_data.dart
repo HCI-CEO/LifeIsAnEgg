@@ -18,6 +18,8 @@ class ToDoHealth {
 
 
 // ---------나의 경우...-----------
+// flutter pub add provider
+// flutter pub get
 // import 'package:life_is_an_egg/global_data.dart' as data;
 // import 'package:provider/provider.dart';
 // 제일 상단에 이렇게 넣어서 사용
@@ -26,10 +28,11 @@ class CalendarData with ChangeNotifier {
   // 현재 화면에 나타낼 날짜 -> 이 값에 따라 아래 todolist 바뀜
   DateTime _selectedDay = DateTime.now();
 
+ 
   // 값 get할 때
   // context.watch<data.CalendarData>().selectedDay;
   DateTime get selectedDay => _selectedDay;
-
+  
   //  값을 변경하고 싶을 때
   // context.read<data.CalendarData>().changeDay(변경하고 싶은 DateTime 객체);
   void changeDay(DateTime day){
