@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:life_is_an_egg/day_file_box.dart';
+import 'package:life_is_an_egg/global_data.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context)=>CalendarData(),
+      child: const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,10 +42,6 @@ class MyApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-
-
-              /************ 여기 캘린더 ************/
-
 
               FileBox(),
             ],
