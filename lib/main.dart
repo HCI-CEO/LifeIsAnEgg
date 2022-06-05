@@ -40,14 +40,12 @@ class MyApp extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        body: Center(
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-
-
-              /************ 여기 캘린더 ************/
               SizedBox (
                 height: 404,
                 width: 355,
