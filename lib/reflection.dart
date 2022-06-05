@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:life_is_an_egg/global_data.dart' as data;
+import 'package:provider/provider.dart';
 
-class Reflection extends StatefulWidget {
-  const Reflection({Key? key}) : super(key: key);
+class ReflectionResult extends StatefulWidget {
+  const ReflectionResult({Key? key}) : super(key: key);
 
   @override
-  State<Reflection> createState() => _ReflectionState();
+  State<ReflectionResult> createState() => _ReflectionResultState();
 }
 
-class _ReflectionState extends State<Reflection> {
-  int rateDay = 3;
-
-  String bestPart ='';
-  String promises = '';
-
+class _ReflectionResultState extends State<ReflectionResult> {
   ScrollController scrollController = ScrollController();
   TextEditingController bestPartTextController = TextEditingController();
   TextEditingController promisesTextController = TextEditingController();
@@ -25,221 +22,235 @@ class _ReflectionState extends State<Reflection> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      child: SingleChildScrollView (
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget> [
-            const SizedBox(height: 8),
-            const Text('How was the day?',
-            style: TextStyle(
-              color: Color.fromARGB(255, 46, 46, 46),
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),),
-            const SizedBox(height: 35,),
-            const Text('1. Rate Your Day',
-              style: TextStyle(
-                color: Color.fromARGB(255, 46, 46, 46),
-                fontWeight: FontWeight.w500
-              )
-            ),
-            const SizedBox(height: 22),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget> [
-                SizedBox(width: 18),
-                Text('Worst',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 46, 46, 46),
-                    )
-                ),
-                SizedBox(width: 220),
-                Text('Best',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 46, 46, 46),
-                    )
-                ),
-              ],//다시 수정
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget> [
-                Radio(
-                    value: 1,
-                    groupValue: rateDay,
-                    onChanged: (val) {
-                      setState(() {
-                        rateDay = 1;
-                      });
-                    }),
-                const SizedBox(width: 15),
-                Radio(
-                    value: 2,
-                    groupValue: rateDay,
-                    onChanged: (val) {
-                      setState(() {
-                        rateDay = 2;
-                      });
-                    }),
-                const SizedBox(width: 15),
-                Radio(
-                    value: 3,
-                    groupValue: rateDay,
-                    onChanged: (val) {
-                      setState(() {
-                        rateDay = 3;
-                      });
-                    }),
-                const SizedBox(width: 15),
-                Radio(
-                    value: 4,
-                    groupValue: rateDay,
-                    onChanged: (val) {
-                      setState(() {
-                        rateDay = 4;
-                      });
-                    }),
-                const SizedBox(width: 15),
-                Radio(
-                    value: 5,
-                    groupValue: rateDay,
-                    onChanged: (val) {
-                      setState(() {
-                        rateDay = 5;
-                      });
-                    }),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Text('2. What was the best part of your day?',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 46, 46, 46),
-                  fontWeight: FontWeight.w500
-                ),
-            ),
-            TextField(
-              controller: bestPartTextController,
-              onChanged: (text) {
-                bestPart = bestPartTextController.text;
-              },
-              onTap: () {
-                scrollController.animateTo(140.0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease);
-              },
-            ),
-            const SizedBox(height: 45),
-            const Text('3. Promises for tomorrow',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 46, 46, 46),
-                  fontWeight: FontWeight.w500
-              ),
-            ),
-            TextField(
-              controller: promisesTextController,
-              onChanged: (text) {
-                promises = promisesTextController.text;
-              },
-              onTap: () {
-                scrollController.animateTo(140.0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease);
-              },
-            ),
-            const SizedBox(height: 50),
-            Row(
-              children: [
-                const SizedBox(width: 248),
-                OutlinedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Reflection Result'),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: const <Widget> [
-                                  Text('Once submitted, you cannot edit the answers again.',
-                                      style: TextStyle (
-                                          color: Color.fromARGB(255, 46, 46, 46)
-                                      )),
-                                  Text('Are you sure you want to submit?',
-                                      style: TextStyle (
-                                          color: Color.fromARGB(255, 46, 46, 46)
-                                      ))
-                                ],
-                              ),
-                            ),
-                            actions: <Widget> [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('NO',
-                                  style: TextStyle (
-                                    color: Color.fromARGB(255, 46, 46, 46)
-                                  ),)
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, 'YES');
-                                  },
-                                  child: Text('YES',
-                                  style: TextStyle (
-                                    color: Colors.blue[400],
-                                  ),)
-                              )
-                            ],
-                          );
-                        }
-                      );
-                    },
-                    child: const Text('Submit',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 46, 46, 46),
-                        )
-                    )
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ReflectionResult extends StatefulWidget {
-  const ReflectionResult({Key? key}) : super(key: key);
-
-  @override
-  State<ReflectionResult> createState() => _ReflectionResultState();
-}
-
-class _ReflectionResultState extends State<ReflectionResult> {
   final List _emojiImg = <String>['images/worst.png','images/bad.png', 'images/soso.png', 'images/good.png', 'images/best.png'];
 
   @override
   Widget build(BuildContext context) {
-    // 데베에서 가져오기
-    int rateDay = 3;
-    double rateValue = 43.0;
-    String bestPart = '';
-    String promises = '';
-    bool yesMemory = true;
+    var selectedDay = context.watch<data.CalendarData>().selectedDay;
+    var SubmitExist = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['reflection']?['answer'];
+    var fixed = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['fixed'];
+    var unfixed = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['unfixed'];
+    var tasks = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['health']?['tasks'];
+
+    int inputRateDay = 3;
+    String inputBestPart = '';
+    String inputPromises = '';
+
+    int rateDay = SubmitExist.rateDay;
+    String bestPart = SubmitExist.bestPart;
+    String promises = SubmitExist.promises;
+    bool yesMemory = SubmitExist.yesMemory;
+
+    int num = 0;
+
+    for(int i = 0; i < fixed.length; i++) {
+      if(fixed[i].isDone == true) num++;
+    }
+
+    for(int i = 0; i < unfixed.length; i++) {
+      if(unfixed[i].isDone == true) num++;
+    }
+
+    for(int i = 0; i < tasks.length; i++) {
+      if(tasks[i].isDone == true) num++;
+    }
+
+    double rateValue = num / (fixed.length+unfixed.length+tasks.length) * 83;
 
     if(yesMemory) {
-      return Reflection();
+      return Container (
+          child: SingleChildScrollView (
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget> [
+                const SizedBox(height: 8),
+                const Text('How was the day?',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 46, 46, 46),
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),),
+                const SizedBox(height: 35,),
+                const Text('1. Rate Your Day',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 46, 46, 46),
+                        fontWeight: FontWeight.w500
+                    )
+                ),
+                const SizedBox(height: 22),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const <Widget> [
+                    SizedBox(width: 18),
+                    Text('Worst',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 46, 46, 46),
+                        )
+                    ),
+                    SizedBox(width: 220),
+                    Text('Best',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 46, 46, 46),
+                        )
+                    ),
+                  ],//다시 수정
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget> [
+                    Radio(
+                        value: 1,
+                        groupValue: inputRateDay,
+                        onChanged: (val) {
+                          setState(() {
+                            inputRateDay = 1;
+                          });
+                        }),
+                    const SizedBox(width: 15),
+                    Radio(
+                        value: 2,
+                        groupValue: inputRateDay,
+                        onChanged: (val) {
+                          setState(() {
+                            inputRateDay = 2;
+                          });
+                        }),
+                    const SizedBox(width: 15),
+                    Radio(
+                        value: 3,
+                        groupValue: inputRateDay,
+                        onChanged: (val) {
+                          setState(() {
+                            inputRateDay = 3;
+                          });
+                        }),
+                    const SizedBox(width: 15),
+                    Radio(
+                        value: 4,
+                        groupValue: inputRateDay,
+                        onChanged: (val) {
+                          setState(() {
+                            inputRateDay = 4;
+                          });
+                        }),
+                    const SizedBox(width: 15),
+                    Radio(
+                        value: 5,
+                        groupValue: inputRateDay,
+                        onChanged: (val) {
+                          setState(() {
+                            inputRateDay = 5;
+                          });
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                const Text('2. What was the best part of your day?',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 46, 46, 46),
+                      fontWeight: FontWeight.w500
+                  ),
+                ),
+                TextField(
+                  controller: bestPartTextController,
+                  onChanged: (text) {
+                    inputBestPart = bestPartTextController.text;
+                  },
+                  onTap: () {
+                    scrollController.animateTo(140.0,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.ease);
+                  },
+                ),
+                const SizedBox(height: 45),
+                const Text('3. Promises for tomorrow',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 46, 46, 46),
+                      fontWeight: FontWeight.w500
+                  ),
+                ),
+                TextField(
+                  controller: promisesTextController,
+                  onChanged: (text) {
+                    inputPromises = promisesTextController.text;
+                  },
+                  onTap: () {
+                    scrollController.animateTo(140.0,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.ease);
+                  },
+                ),
+                const SizedBox(height: 50),
+                Row(
+                  children: [
+                    const SizedBox(width: 238),
+                    OutlinedButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Reflection Result'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: const <Widget> [
+                                        Text('Once submitted, you cannot edit the answers again.',
+                                            style: TextStyle (
+                                                color: Color.fromARGB(255, 46, 46, 46)
+                                            )),
+                                        Text('Are you sure you want to submit?',
+                                            style: TextStyle (
+                                                color: Color.fromARGB(255, 46, 46, 46)
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget> [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('NO',
+                                          style: TextStyle (
+                                              color: Color.fromARGB(255, 46, 46, 46)
+                                          ),)
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            SubmitExist.yesMemory = false;
+                                            SubmitExist.rateDay = inputRateDay;
+                                            SubmitExist.bestPart = inputBestPart;
+                                            SubmitExist.promises = inputPromises;
+                                          });
+                                          Navigator.pop(context, 'YES');
+                                        },
+                                        child: Text('YES',
+                                          style: TextStyle (
+                                            color: Colors.blue[400],
+                                          ),)
+                                    )
+                                  ],
+                                );
+                              }
+                          );
+                        },
+                        child: const Text('Submit',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 46, 46, 46),
+                            )
+                        )
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ));
     } else {
       return Container(
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +350,7 @@ class _ReflectionResultState extends State<ReflectionResult> {
                               color: Color.fromARGB(255, 46, 46, 46),
                               fontWeight: FontWeight.w500,
                               fontSize: 15)),
-                      Text('08:12',
+                      Text('10:12',
                           style: TextStyle(
                             color: Color.fromARGB(255, 46, 46, 46),
                             fontWeight: FontWeight.w600,
@@ -394,7 +405,9 @@ class _ReflectionResultState extends State<ReflectionResult> {
                       )),
                   const SizedBox(height: 7)
                 ],
-              )));
+              )
+        )
+      );
     }
   }
 }

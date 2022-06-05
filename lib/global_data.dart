@@ -16,6 +16,15 @@ class ToDoHealth {
   ToDoHealth(this.title, this.doingTime);
 }
 
+class SubmitExist {
+  bool yesMemory = true;
+  int rateDay = 3;
+  String bestPart = '';
+  String promises = '';
+
+  //SubmitExist(this.rateDay, this.bestPart, this.promises);
+}
+
 
 // ---------나의 경우...-----------
 // flutter pub add provider
@@ -66,8 +75,25 @@ class CalendarData with ChangeNotifier {
         },
         // reflection
         'reflection' : {
-          'image' : 'img/dkfj',
-          'answer' : ['answer1', 'answer2'],
+          'answer' : SubmitExist(),
+        }
+      },
+      6:{
+        // 스케줄
+        'schedule': {
+          'fixed' : [ToDo('fixed', 0), ToDo('fixed1', 2)],
+          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
+        },
+        // 건강
+        'health' : {
+          'tasks' : [
+            ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
+            ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
+            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
+          ]
+        },
+        'reflection' : {
+          'answer' : SubmitExist(),
         }
       },
       8: {
@@ -86,10 +112,14 @@ class CalendarData with ChangeNotifier {
         },
         // reflection
         'reflection' : {
-          'image' : 'img/dkfj',
-          'answer' : ['answer3', 'answer4'],
+          'answer' : SubmitExist(),
         }
       },
+      11: {
+        'reflection' : {
+          'answer' : SubmitExist(),
+        }
+      }
     }
   };
 }
