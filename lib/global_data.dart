@@ -21,8 +21,6 @@ class SubmitExist {
   int rateDay = 3;
   String bestPart = '';
   String promises = '';
-
-  //SubmitExist(this.rateDay, this.bestPart, this.promises);
 }
 
 

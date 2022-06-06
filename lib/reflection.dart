@@ -49,6 +49,10 @@ class _ReflectionResultState extends State<ReflectionResult> with WidgetsBinding
 
   final List _emojiImg = <String>['images/worst.png','images/bad.png', 'images/soso.png', 'images/good.png', 'images/best.png'];
   bool textClicked = false;
+  int inputRateDay = 4;
+  String inputBestPart = '';
+  String inputPromises = '';
+  int fixedNum = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +61,6 @@ class _ReflectionResultState extends State<ReflectionResult> with WidgetsBinding
     var fixed = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['fixed'];
     var unfixed = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['schedule']?['unfixed'];
     var tasks = context.watch<data.CalendarData>().calendar[selectedDay.month]?[selectedDay.day]?['health']?['tasks'];
-
-    int inputRateDay = 3;
-    String inputBestPart = '';
-    String inputPromises = '';
-    int fixedNum = 0;
 
     int rateDay = SubmitExist.rateDay;
     String bestPart = SubmitExist.bestPart;
