@@ -14,6 +14,8 @@ void main() {
   );
 }
 
+ScrollController scrollController = ScrollController();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
                 elevation: 0,
               ),
               body: SingleChildScrollView(
+                controller: scrollController,
                 scrollDirection: Axis.vertical,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

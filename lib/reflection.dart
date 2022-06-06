@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_is_an_egg/global_data.dart' as data;
+import 'package:life_is_an_egg/main.dart';
 import 'package:provider/provider.dart';
 
 class ReflectionResult extends StatefulWidget {
@@ -9,20 +10,44 @@ class ReflectionResult extends StatefulWidget {
   State<ReflectionResult> createState() => _ReflectionResultState();
 }
 
-class _ReflectionResultState extends State<ReflectionResult> {
-  ScrollController scrollController = ScrollController();
+class _ReflectionResultState extends State<ReflectionResult> with WidgetsBindingObserver {
+  final FocusNode focusNode1 = new FocusNode();
+  final FocusNode focusNode2 = new FocusNode();
   TextEditingController bestPartTextController = TextEditingController();
   TextEditingController promisesTextController = TextEditingController();
 
   @override
-  void dispose(){
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    //focusNode.addListener(focus);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    //focusNode.removeListener(focus);
     bestPartTextController.dispose();
     promisesTextController.dispose();
-    scrollController.dispose();
+    focusNode1.dispose();
+    focusNode2.dispose();
     super.dispose();
   }
 
+  @override
+  void didChangeMetrics() {
+    if (!mounted) return;
+    if ((focusNode1.hasFocus || focusNode2.hasFocus)&&
+        MediaQuery.of(context).viewInsets.bottom > 0.0) {
+      textClicked = true;
+    }
+    else {
+      textClicked = false;
+    }
+  }
+
   final List _emojiImg = <String>['images/worst.png','images/bad.png', 'images/soso.png', 'images/good.png', 'images/best.png'];
+  bool textClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,32 +60,31 @@ class _ReflectionResultState extends State<ReflectionResult> {
     int inputRateDay = 3;
     String inputBestPart = '';
     String inputPromises = '';
+    int fixedNum = 0;
 
     int rateDay = SubmitExist.rateDay;
     String bestPart = SubmitExist.bestPart;
     String promises = SubmitExist.promises;
     bool yesMemory = SubmitExist.yesMemory;
 
-    int num = 0;
-
     for(int i = 0; i < fixed.length; i++) {
-      if(fixed[i].isDone == true) num++;
+      if(fixed[i].isDone == true) fixedNum++;
     }
 
     for(int i = 0; i < unfixed.length; i++) {
-      if(unfixed[i].isDone == true) num++;
+      if(unfixed[i].isDone == true) fixedNum++;
     }
 
     for(int i = 0; i < tasks.length; i++) {
-      if(tasks[i].isDone == true) num++;
+      if(tasks[i].isDone == true) fixedNum++;
     }
 
-    double rateValue = num / (fixed.length+unfixed.length+tasks.length) * 83;
+    double rateValue = fixedNum / (fixed.length+unfixed.length+tasks.length) * 83;
 
     if(yesMemory) {
-      return Container (
+      return GestureDetector (
+          onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView (
-            controller: scrollController,
             scrollDirection: Axis.vertical,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,13 +107,13 @@ class _ReflectionResultState extends State<ReflectionResult> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const <Widget> [
-                    SizedBox(width: 18),
+                    SizedBox(width: 14),
                     Text('Worst',
                         style: TextStyle(
                           color: Color.fromARGB(255, 46, 46, 46),
                         )
                     ),
-                    SizedBox(width: 220),
+                    SizedBox(width: 218),
                     Text('Best',
                         style: TextStyle(
                           color: Color.fromARGB(255, 46, 46, 46),
@@ -154,12 +178,16 @@ class _ReflectionResultState extends State<ReflectionResult> {
                   ),
                 ),
                 TextField(
+                  focusNode: focusNode1,
                   controller: bestPartTextController,
                   onChanged: (text) {
                     inputBestPart = bestPartTextController.text;
                   },
                   onTap: () {
-                    scrollController.animateTo(140.0,
+                    setState(() {
+                      textClicked = true;
+                    });
+                    scrollController.animateTo(500,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.ease);
                   },
@@ -172,12 +200,16 @@ class _ReflectionResultState extends State<ReflectionResult> {
                   ),
                 ),
                 TextField(
+                  focusNode: focusNode2,
                   controller: promisesTextController,
                   onChanged: (text) {
                     inputPromises = promisesTextController.text;
                   },
                   onTap: () {
-                    scrollController.animateTo(140.0,
+                    setState(() {
+                      textClicked = true;
+                    });
+                    scrollController.animateTo(600,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.ease);
                   },
@@ -245,6 +277,7 @@ class _ReflectionResultState extends State<ReflectionResult> {
                     )
                   ],
                 ),
+                textClicked == false ? SizedBox() : SizedBox(height: 500)
               ],
             ),
           ));
