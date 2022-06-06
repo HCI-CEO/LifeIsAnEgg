@@ -96,6 +96,24 @@ class CalendarData with ChangeNotifier {
           'answer' : SubmitExist(),
         }
       },
+      7:{
+        // 스케줄
+        'schedule': {
+          'fixed' : [ToDo('fixed', 0), ToDo('fixed1', 2)],
+          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
+        },
+        // 건강
+        'health' : {
+          'tasks' : [
+            ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
+            ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
+            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
+          ]
+        },
+        'reflection' : {
+          'answer' : SubmitExist(),
+        }
+      },
       8: {
         // 스케줄
         'schedule': {

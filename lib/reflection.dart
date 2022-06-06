@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:life_is_an_egg/global_data.dart' as data;
 import 'package:life_is_an_egg/main.dart';
 import 'package:provider/provider.dart';
@@ -89,11 +90,11 @@ class _ReflectionResultState extends State<ReflectionResult> with WidgetsBinding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget> [
-                const SizedBox(height: 8),
+                const SizedBox(height: 13),
                 const Text('How was the day?',
                   style: TextStyle(
                     color: Color.fromARGB(255, 46, 46, 46),
-                    fontSize: 22,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),),
                 const SizedBox(height: 35,),
@@ -288,12 +289,16 @@ class _ReflectionResultState extends State<ReflectionResult> with WidgetsBinding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Today's Reflection",
-                    style: TextStyle(
+                  const SizedBox(height: 13),
+                  Text(
+                    (selectedDay.month == DateTime.now().month && selectedDay.day == DateTime.now().day?
+                    "Today's Reflection"
+                        :
+                    '${DateFormat.MMMd().format(selectedDay)}${selectedDay.day==1? 'st' : selectedDay.day==2? 'nd' : selectedDay.day==3? 'rd' : 'th'} Reflection'
+                    ),
+                    style: const TextStyle(
                       color: Color.fromARGB(255, 46, 46, 46),
-                      fontSize: 22,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
