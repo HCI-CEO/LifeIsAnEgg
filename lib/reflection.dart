@@ -49,7 +49,7 @@ class _ReflectionResultState extends State<ReflectionResult> with WidgetsBinding
 
   final List _emojiImg = <String>['images/worst.png','images/bad.png', 'images/soso.png', 'images/good.png', 'images/best.png'];
   bool textClicked = false;
-  int inputRateDay = 4;
+  int inputRateDay = 3;
   String inputBestPart = '';
   String inputPromises = '';
   int fixedNum = 0;
