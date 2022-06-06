@@ -102,6 +102,7 @@ class _CalendarState extends State<Calendar> {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
+        availableCalendarFormats: const { CalendarFormat.month: 'Month'},
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, date, events) {
             if (calendar.containsKey(date.month) && calendar[date.month]!.containsKey(date.day)) {

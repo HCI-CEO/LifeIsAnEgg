@@ -57,18 +57,35 @@ class CalendarData with ChangeNotifier {
     // 월
     6: {
       // 일
-      5: {
+      1: {
         // 스케줄
         'schedule': {
-          'fixed' : [ToDo('fixed', 0), ToDo('fixed1', 2)],
-          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
+          'fixed' : [],
+          'unfixed' : [ToDo('AI assignment', 0), ToDo('project', 2)]
         },
         // 건강
         'health' : {
           'tasks' : [
             ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
-            ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
-            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
+            ToDoHealth('go to sleep', DateTime(1970,1,1, 11, 30))
+          ]
+        },
+        // reflection
+        'reflection' : {
+          'answer' : SubmitExist(),
+        }
+      },
+      5: {
+        // 스케줄
+        'schedule': {
+          'fixed' : [],
+          'unfixed' : [ToDo('meet friends', 0),]
+        },
+        // 건강
+        'health' : {
+          'tasks' : [
+            ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 30)),
+
           ]
         },
         // reflection
@@ -79,15 +96,14 @@ class CalendarData with ChangeNotifier {
       6:{
         // 스케줄
         'schedule': {
-          'fixed' : [ToDo('fixed', 0), ToDo('fixed1', 2)],
-          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
+          'fixed' : [],
+          'unfixed' : [ToDo('test', 2), ToDo('birthday party', 2)]
         },
         // 건강
         'health' : {
           'tasks' : [
             ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
-            ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
-            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
+            ToDoHealth('Exercise', DateTime(1970,1,1, 20, 00)),
           ]
         },
         'reflection' : {
@@ -97,36 +113,21 @@ class CalendarData with ChangeNotifier {
       7:{
         // 스케줄
         'schedule': {
-          'fixed' : [ToDo('fixed', 0), ToDo('fixed1', 2)],
-          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
+          'fixed' : [],
+          'unfixed' : [
+            ToDo('register for the summer semester', 0),
+            ToDo('karrot market', 0), // 오타아님ㅠㅠ 당근마켓 영어이름임
+            ToDo('HCI assignment', 2),
+            ToDo('lunch with parents', 1)]
         },
         // 건강
         'health' : {
           'tasks' : [
             ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
             ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
-            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
+            ToDoHealth('go to sleep early', DateTime(1970,1,1, 10, 23))
           ]
         },
-        'reflection' : {
-          'answer' : SubmitExist(),
-        }
-      },
-      8: {
-        // 스케줄
-        'schedule': {
-          'fixed' : [ToDo('fixed', 0), ToDo('fixed1' , 2)],
-          'unfixed' : [ToDo('test', 0), ToDo('test1', 2), ToDo('test2', 1)]
-        },
-        // 건강
-        'health' : {
-          'tasks' : [
-            ToDoHealth('Vitamin', DateTime(1970,1,1, 8, 7)),
-            ToDoHealth('dentist', DateTime(1970,1,1, 12, 7)),
-            ToDoHealth('go to sleep', DateTime(1970,1,1, 12, 23))
-          ]
-        },
-        // reflection
         'reflection' : {
           'answer' : SubmitExist(),
         }
